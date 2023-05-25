@@ -163,6 +163,21 @@ window.setInterval(() => {
   console.log(asteroids)
 }, 3000)
 
+function circleCollision(circle1, circle2) {
+  const xDifference = circle2.position.x - circle1.position.x
+  const yDifference = circle2.position.y - circle1.position.y
+
+  const distance = Math.sqrt(
+    xDifference * xDifference + yDifference * yDifference
+  )
+
+  if (distance <= circle1.radius + circle2.radius) {
+    return true
+  }
+
+  return false
+}
+
 function animate() {
   window.requestAnimationFrame(animate)
   c.fillStyle = 'black'
@@ -198,6 +213,16 @@ function animate() {
       asteroid.position.y + asteroid.radius < 0
     ) {
       asteroids.splice(i, 1)
+    }
+
+    // projectiles
+    for (let j = projectiles.length - 1; j >= 0; j--) {
+      const projectile = projectiles[j]
+
+      if (circleCollision(asteroid, projectile)) {
+        asteroids.splice(i, 1)
+        projectiles.splice(j, 1)
+      }
     }
   }
 
